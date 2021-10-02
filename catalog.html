@@ -9,6 +9,7 @@
 		<link rel="stylesheet" href="./style/mobile.css" />
 		<link rel="stylesheet" href="./style/css/fa.css" />
 		<script src="./js/CDFramework.js"></script>
+		<script src="./js/db.js"></script>
 	</head>
 	<body>
 		<div class="header">
@@ -21,6 +22,7 @@
 					<li class="menu__list_option"><a class="option__link" href="./index.html">Главная</a></li>
 					<li class="menu__list_option active"><a class="option__link" href="./catalog.html">Каталог</a></li>
 					<li class="menu__list_option"><a class="option__link" href="./about.html">О нас</a></li>
+					<li class="menu__list_option"><a class="option__link" href="./search.html">Поиск</a></li>
 					<li class="menu__list_option"><a class="option__link" href="./contact.html">Контакты</a></li>
 				</ul>
 			</nav>
@@ -34,7 +36,13 @@
 			</div>
 		</div>
 		<div class="body">
-			
+			<div class="body__title_catalog">
+				<h1 class="header_text header_catalog">Каталог</h1>
+				<div class="products__filter">Фильтр по цене <i class="products__filter_icon fas fa-sort-amount-down-alt"></i></div>
+			</div>
+			<div class="body__content">
+				<div class="products__list"></div>
+			</div>
 		</div>
 		<div class="footer">
 			<div class="footer__content">
@@ -48,6 +56,7 @@
 							<li class="nav__list_element"><a class="footer__option_link" href="./index.html">Главная</a></li>
 							<li class="nav__list_element"><a class="footer__option_link" href="./catalog.html">Каталог</a></li>
 							<li class="nav__list_element"><a class="footer__option_link" href="./about.html">О нас</a></li>
+							<li class="nav__list_element"><a class="footer__option_link" href="./search.html">Поиск</a></li>
 							<li class="nav__list_element"><a class="footer__option_link" href="./contact.html">Контакты</a></li>
 						</ul>
 					</nav>
@@ -59,5 +68,6 @@
 			</div>
 		</div>
 		<script src="./js/page.js"></script>
+		<script src="./js/catalog.js"></script>
 	</body>
 </html>

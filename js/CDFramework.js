@@ -79,8 +79,20 @@ class CDElement {
 	addClass(cls) {
 		if (isEmpty(cls))
 			return this;
-		this.element.classList.add(cls);
+		cls.split(' ').forEach((c) => {
+			this.element.classList.add(c);
+		});
 		return this;
+	}
+	
+	getClass() {
+		if (isEmpty(this.element.classList))
+			return '';
+		let classList = '';
+		this.element.classList.forEach((cls) => {
+			classList += cls + " ";
+		});
+		return classList.trim();
 	}
 	
 	removeClass(cls) {

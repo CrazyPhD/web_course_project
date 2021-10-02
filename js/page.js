@@ -10,7 +10,7 @@ const mobileWidth = 768;
 
 menu_button.on('click', function() {
 	if (header_menu.isMinimized()) {
-		header_menu.expandHeight(216);
+		header_menu.expandHeight(270);
 		menu_button_icon_close.enable('inline-block');
 		menu_button_icon_open.disable();
 	} else {

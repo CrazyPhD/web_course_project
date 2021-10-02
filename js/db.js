@@ -8,6 +8,8 @@ class Record {
 		this.id = id;
 		this.keywords = '';
 		this.description = '';
+		this.shortdesc = '';
+		this.link = '';
 	}
 	
 	getID() {
@@ -16,6 +18,15 @@ class Record {
 	
 	getName() {
 		return this.name;
+	}
+	
+	setLink(link) {
+		this.link = link;
+		return this;
+	}
+	
+	getLink() {
+		return this.link;
 	}
 	
 	setKeywords(keywords) {
@@ -34,6 +45,15 @@ class Record {
 	
 	getDescription() {
 		return this.description;
+	}
+	
+	setShortDescription(desc) {
+		this.shortdesc = desc;
+		return this;
+	}
+	
+	getShortDescription() {
+		return this.shortdesc;
 	}
 }
 
@@ -94,19 +114,21 @@ class DB {
 		if (!isEmpty(config.price) && isProduct) obj.setPrice(config.price);
 		if (!isEmpty(config.image) && isProduct) obj.setImage(config.image);
 		if (!isEmpty(config.description)) obj.setDescription(config.description);
+		if (!isEmpty(config.link)) obj.setLink(config.link);
+		if (!isEmpty(config.shortdesc)) obj.setShortDescription(config.shortdesc);
 		return obj;
 	}
 	
 	addProduct(config) {
 		if (config.type !== 'Product')
 			return;
-		this.products.push(this.formRecord(config));
+		this.products[this.id + 1] = this.formRecord(config);
 	}
 	
 	addPage(config) {
 		if (config.type !== 'Page')
 			return;
-		this.pages.push(this.formRecord(config));
+		this.pages[this.id + 1] = this.formRecord(config);
 	}
 	
 	find(q) {
@@ -140,17 +162,21 @@ class DB {
 				return this.products;
 		}
 	}
+	
+	getProduct(id) {
+		return this.products[id];
+	}
 }
 
 const db = new DB();
 
-db.add({type: 'Product', name: 'Поиск подпалиндромов', keywords: 'подпалиндромы,палиндромы,поиск,алгоритм,PHP,JavaScript', description: 'Инструмент для поиска подпалиндромов в строке. Используется алгоритм Манакера, как наиболее эффективный из всех известных.', price: 9000});
-db.add({type: 'Product', name: 'Кубик рубика (C, OpenGL)', keywords: 'головоломка,кубик,рубик,C,OpenGL', description: 'Десктопное приложение, позволяющее собирать кубик рубика как самостоятельно, так и автоматически с последующим выведением формулы сборки. Применяются кратчайшие ходы сборки из любого состояния.', price: 15000});
-db.add({type: 'Product', name: 'Игра "Жизнь" (C)', keywords: 'игра,жизнь,conway,C', description: 'Десктопное приложение, позволяющее генерировать из исходного черно-белого BMP-файла необходимое количество поколений игры "Жизнь".', price: 5000});
-db.add({type: 'Product', name: 'Двойной маятник', keywords: 'физика,маятник,двойной,C,JavaScript', description: 'Десктопное приложение, представляющее собой физическую модель двойного маятника с отрисовкой траектории.', price: 8000});
-db.add({type: 'Product', name: 'Баллистическое движение', keywords: 'физика,баллистика,выстрел,цель,C', description: 'Десктопное приложение, представляющее собой физическую модель баллистического движения с отрисовкой траектории движения снаряда, а также с возможностью постановки цели для выстрела. На выходе получается BMP-файл с траекторией и масштабной сеткой.', price: 9000});
-db.add({type: 'Product', name: 'Нонограмма', keywords: 'игра,нонограмма,nonogram,Java', description: 'Десктопное приложение, представляющее собой игру - нонограмму. Доступные режимы 10x10, 15x15. Присутствует система рекордов (по времени решения нонограмм), ведение статистики (количество решенных нонограмм, количество ошибок и проигрышей).', price: 25000});
+db.add({type: 'Product', name: 'Поиск подпалиндромов', image: './img/palindrome.png', link: './products/subpalindromes.html', keywords: 'подпалиндромы,палиндромы,поиск,алгоритм,PHP,JavaScript', shortdesc: 'Инструмент для поиска подпалиндромов в строке, используя алгоритм Манакера.', description: 'Инструмент для поиска подпалиндромов в строке. Используется алгоритм Манакера, как наиболее эффективный из всех известных.', price: 9000});
+db.add({type: 'Product', name: 'Кубик рубика (C, OpenGL)', image: './img/rubick.png', link: './products/rubick.html', keywords: 'головоломка,кубик,рубик,C,OpenGL', shortdesc: 'Десктопное приложение, позволяющее собирать кубик рубика как самостоятельно, так и автоматически.', description: 'Десктопное приложение, позволяющее собирать кубик рубика как самостоятельно, так и автоматически с последующим выведением формулы сборки. Применяются кратчайшие ходы сборки из любого состояния.', price: 15000});
+db.add({type: 'Product', name: 'Игра "Жизнь" (C)', image: './img/game.png', link: './products/conways_life_game.html', keywords: 'игра,жизнь,conway,C', shortdesc: 'Игра "Жизнь" Конвея на BMP.', description: 'Десктопное приложение, позволяющее генерировать из исходного черно-белого BMP-файла необходимое количество поколений игры "Жизнь".', price: 5000});
+db.add({type: 'Product', name: 'Двойной маятник', image: './img/double_pendulum.png', link: './products/double_pendulum.html', keywords: 'физика,маятник,двойной,C,JavaScript', shortdesc: 'Десктопное приложение, представляющее собой физическую модель двойного маятника.', description: 'Десктопное приложение, представляющее собой физическую модель двойного маятника с отрисовкой траектории.', price: 8000});
+db.add({type: 'Product', name: 'Баллистическое движение', image: './img/ballistic.bmp', link: './products/ballistic.html', keywords: 'физика,баллистика,выстрел,цель,C', shortdesc: 'Десктопное приложение, представляющее собой физическую модель баллистического движения.', description: 'Десктопное приложение, представляющее собой физическую модель баллистического движения с отрисовкой траектории движения снаряда, а также с возможностью постановки цели для выстрела. На выходе получается BMP-файл с траекторией и масштабной сеткой.', price: 9000});
+db.add({type: 'Product', name: 'Нонограмма', image: './img/nonogram.png', link: './products/nonogram.html', keywords: 'игра,нонограмма,nonogram,Java', shortdesc: 'Десктопное приложение, представляющее собой игру - нонограмму.', description: 'Десктопное приложение, представляющее собой игру - нонограмму. Доступные режимы 10x10, 15x15. Присутствует система рекордов (по времени решения нонограмм), ведение статистики (количество решенных нонограмм, количество ошибок и проигрышей).', price: 25000});
 
-db.add({type: 'Page', name: 'О нас', keywords: 'магазин,софта,программное,обеспечение'});
-db.add({type: 'Page', name: 'Контакты', keywords: 'адрес,контакты,контакт'});
-db.add({type: 'Page', name: 'Каталог', keywords: 'магазин,программа,товар,товары'});
+db.add({type: 'Page', name: 'О нас', link: './about.html', keywords: 'магазин,софта,программное,обеспечение'});
+db.add({type: 'Page', name: 'Контакты', link: './contact.html', keywords: 'адрес,контакты,контакт'});
+db.add({type: 'Page', name: 'Каталог', link: './catalog.html', keywords: 'магазин,программа,товар,товары'});

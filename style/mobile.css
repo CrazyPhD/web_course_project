@@ -2,7 +2,7 @@
 @media (max-width: 768px) {
 	
 	.body {
-		width: calc(100% - 30px);
+		width: calc(100% - 50px);
 	}
 	
 	.header__logo {
