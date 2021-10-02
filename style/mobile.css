@@ -70,9 +70,18 @@
 		align-items: stretch;
 	}
 	
+	.product__info {
+		align-items: center;
+	}
+	
 	.product__buy {
 		width: unset;
 		margin-bottom: 15px;
+	}
+	
+	.product__image_container {
+		margin-bottom: 10px;
+		margin-right: 0;
 	}
 }
 

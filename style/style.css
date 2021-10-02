@@ -444,7 +444,6 @@ body {
 
 .product__header {
 	display: flex;
-	justify-content: center;
 }
 
 .product__image_container {
@@ -464,7 +463,6 @@ body {
 	display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    align-items: center;
 }
 
 .product__title {
@@ -479,7 +477,7 @@ body {
 .product__row {
 	display: flex;
     flex-direction: row;
-	justify-content: space-between;
+	justify-content: flex-start;
 }
 
 .product__buy {
@@ -507,6 +505,7 @@ body {
     flex-direction: row;
     align-items: center;
 	justify-content: center;
+	margin-left: 15px;
 }
 
 .product__share_button {
