@@ -83,6 +83,10 @@
 		margin-bottom: 10px;
 		margin-right: 0;
 	}
+	
+	.product__share {
+		margin-left: 0;
+	}
 }
 
 /* Galaxy Fold etc. width <= 330 */
