@@ -29,7 +29,7 @@ window_.on('resize', function() {
 });
 
 DOM.get('.header__logo').on('click', function() {
-	window_.get().location = './index.html';
+	window_.get().location = (/products/.test(window_.get().location) ? '.' : '') + './index.html';
 });
 
 setInterval(function() {

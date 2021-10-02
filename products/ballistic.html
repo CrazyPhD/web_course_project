@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Магазин софта - Каталог</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1" /> 
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<link rel="stylesheet" href="../style/fonts.css" />
+		<link rel="stylesheet" href="../style/style.css" />
+		<link rel="stylesheet" href="../style/mobile.css" />
+		<link rel="stylesheet" href="../style/css/fa.css" />
+		<script src="../js/CDFramework.js"></script>
+		<script src="../js/db.js"></script>
+		<script>
+			const PRODUCT_ID = 5;
+		</script>
+	</head>
+	<body>
+		<div class="header">
+			<div class="header__logo">
+				<div class="logo__icon"></div>
+				<div class="logo__title">SOFTWARE SHOP</div>
+			</div>
+			<nav class="header__menu">
+				<ul class="menu__list">
+					<li class="menu__list_option"><a class="option__link" href="../index.html">Главная</a></li>
+					<li class="menu__list_option active"><a class="option__link" href="../catalog.html">Каталог</a></li>
+					<li class="menu__list_option"><a class="option__link" href="../about.html">О нас</a></li>
+					<li class="menu__list_option"><a class="option__link" href="../search.html">Поиск</a></li>
+					<li class="menu__list_option"><a class="option__link" href="../contact.html">Контакты</a></li>
+				</ul>
+			</nav>
+			<div class="header__cart">
+				<i class="fas fa-shopping-cart"></i>
+				<div class="cart__counter disabled"></div>
+			</div>
+			<div class="header__menu_button">
+				<i class="fas fa-bars icon-open"></i>
+				<i class="fas fa-times icon-close"></i>
+			</div>
+		</div>
+		<div class="body">
+			<div class="body__title">
+				<h1 class="header_text"><a class="content__link" href="../catalog.html">Каталог</a> &gt; <span class="product__name"></span></h1>
+			</div>
+			<div class="body__content">
+				<div class="product__additional_info">
+					<div class="product__system_prefs">
+						<h3 class="paragraph">Системные требования:</h3>
+						<p class="product__system_prefs_el">ОС: Windows, Linux</p>
+						<p class="product__system_prefs_el">Процессор: i5.</p>
+						<p class="product__system_prefs_el">Оперативная память: 6 GB ОЗУ</p>
+						<p class="product__system_prefs_el">Видеокарта: NVIDIA GeForce 650 (min 2 Gb)</p>
+						<p class="product__system_prefs_el">DirectX: Версии 9.0.</p>
+						<p class="product__system_prefs_el">Место на диске: 8 GB.</p>
+					</div>
+					<div class="product__contacts">
+						<h3 class="paragraph">Если у Вас возникли вопросы:</h3>
+						<p>Посетите страницу <a class="content__link" href="../contact.html">контактов</a></p>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="footer">
+			<div class="footer__content">
+				<div class="footer__content_left">
+					<div class="footer__logo">
+						<div class="logo__icon"></div>
+						<div class="logo__title">SOFTWARE SHOP</div>
+					</div>
+					<nav class="footer__nav">
+						<ul class="footer__nav_list">
+							<li class="nav__list_element"><a class="footer__option_link" href="../index.html">Главная</a></li>
+							<li class="nav__list_element"><a class="footer__option_link" href="../catalog.html">Каталог</a></li>
+							<li class="nav__list_element"><a class="footer__option_link" href="../about.html">О нас</a></li>
+							<li class="nav__list_element"><a class="footer__option_link" href="../search.html">Поиск</a></li>
+							<li class="nav__list_element"><a class="footer__option_link" href="../contact.html">Контакты</a></li>
+						</ul>
+					</nav>
+				</div>
+				<div class="footer__content_middle"></div>
+				<div class="footer__content_right">
+					<span class="footer__copyright">&copy; 2021 CrazyDoctor</span>
+				</div>
+			</div>
+		</div>
+		<script src="../js/page.js"></script>
+		<script src="../js/product.js"></script>
+	</body>
+</html>

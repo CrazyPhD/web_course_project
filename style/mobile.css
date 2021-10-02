@@ -58,11 +58,27 @@
 	.footer__content {
 		width: calc(100% - 30px);
 	}
+	
+	.product__header {
+		flex-direction: column;
+		align-items: center;
+	}
+	
+	.product__row {
+		flex-direction: column;
+		flex-wrap: wrap;
+		align-items: stretch;
+	}
+	
+	.product__buy {
+		width: unset;
+		margin-bottom: 15px;
+	}
 }
 
 /* Galaxy Fold etc. width <= 330 */
 @media (max-width: 330px) {
-	.body__form {
-		width: 270px;
+	.product__share_button:not(:first-child) {
+		margin-left: 2px;
 	}
 }

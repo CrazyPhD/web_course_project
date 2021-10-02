@@ -6,7 +6,7 @@
 function isEmpty(val) {
 	return val === null || val === undefined ||
 			val == 0 || val === 'none' ||
-			val === '' || val == '0px';
+			val === '' || val === '0px' || val === [];
 }
 
 class CDElement {
@@ -30,6 +30,10 @@ class CDElement {
 	
 	append(element) {
 		this.element.append(element.get());
+	}
+	
+	prepend(element) {
+		this.element.prepend(element.get());
 	}
 	
 	disable() {
@@ -156,7 +160,7 @@ class Dom {
 		return new CDElement(document.querySelector(selector));
 	}
 	
-	create(config, container) {
+	create(config, container, prepend) {
 		if (isEmpty(config) || isEmpty(config.tag))
 			return;
 		let element = new CDElement(document.createElement(config.tag));
@@ -180,7 +184,7 @@ class Dom {
 		}
 		
 		if (!isEmpty(container))
-			container.append(element);
+			(prepend === true ? container.prepend(element) : container.append(element));
 		return element;
 	}
 	

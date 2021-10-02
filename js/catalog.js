@@ -30,7 +30,7 @@ function printProducts(sort) {
 	let products = db.getProducts(sort);
 	products.forEach((product) => {
 		if (!isEmpty(product)) {
-			let image = {tag: 'img', cls: 'product_image', attr: [['src', product.getImage()]]};
+			let image = {tag: 'img', cls: 'product_image', attr: [['src', product.getImage()], ['alt', product.getName()]]};
 			let title = {tag: 'h4', cls: 'header_text product_name', innerHTML: product.getName()};
 			let header = {tag: 'div', cls: 'product_header', cn: [image, title]};
 			let body = {tag: 'div', cls: 'product_body', innerHTML: product.getShortDescription()};
@@ -45,7 +45,7 @@ function printProducts(sort) {
 				if (e.target.className === button.getClass() ||
 						e.target.className === price.getClass())
 					return;
-				console.log(product.getLink());
+				window_.get().location = product.getLink();
 			});
 			button.on('click', function(e) {
 				console.log(product.getPrice());
