@@ -49,7 +49,7 @@ function renderCart() {
 		DOM.create(productsContainer, cartContainer);
 		DOM.create(cartSummary, cartContainer);
 	} else {
-		cartContainer.setInnerHTML('Ваша корзина пуста. Зайдите в <a class="content__link" href="./catalog.html">каталог</a> или воспользуйтесь <a class="content__link" href="./search.html">поиском</a>, чтобы найти товары и добавить их в корзину.<div class="cart__empty"></div>');
+		cartContainer.setInnerHTML('Ваша корзина пуста.<br/>Зайдите в <a class="content__link" href="./catalog.html">каталог</a> или воспользуйтесь <a class="content__link" href="./search.html">поиском</a>, чтобы найти товары и добавить их в корзину.<div class="cart__empty"></div>');
 	}
 }
 
