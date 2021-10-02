@@ -643,6 +643,8 @@ body {
     box-shadow: 0 0 5px 0 #ccc;
     border: 1px solid #ccc;
     margin-bottom: 15px;
+    display: flex;
+    align-items: center;
 }
 
 .cart__product:hover {
@@ -652,11 +654,9 @@ body {
 
 .cart__product_left {
 	width: 70px;
-    min-height: 147px;
-    display: inline-flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    max-height: 70px;
+    display: inline-block;
+    overflow: hidden;
 }
 
 .cart__product_image {
@@ -698,4 +698,8 @@ body {
 	font-size: 20px;
 	text-align: right;
 	font-weight: 900;
+}
+
+.cart__product_title {
+	margin-bottom: 15px;
 }
