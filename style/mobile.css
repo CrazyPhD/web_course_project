@@ -1,0 +1,68 @@
+/* For most of the mobile devices. */
+@media (max-width: 768px) {
+	
+	.body {
+		width: calc(100% - 30px);
+	}
+	
+	.header__logo {
+		left: 15px;
+	}
+	
+	.body__form {
+		width: 320px;
+	}
+	
+	.header__menu {
+		display: block;
+		height: 0px;
+		position: absolute;
+		margin: 0;
+		width: 100%;
+		background: #FFF;
+		transition: height ease-in 0.5s;
+		overflow: hidden;
+		border-bottom: 1px solid #ccc;
+	}
+	
+	.header__menu_button {
+		display: inline-block;
+	}
+	
+	.menu__list_option {
+		float: none;
+		padding: 0;
+	}
+	
+	.menu__list_option.active > .option__link,
+	.menu__list_option:hover > .option__link	{
+		border: 0;
+		color: #FFF;
+	}
+	
+	.menu__list_option.active,
+	.menu__list_option:hover	{
+		background-color: #1082D2;
+	}
+	
+	.option__link {
+		display: block;
+		padding: 0;
+		height: 54px;
+		line-height: 54px;
+		padding-left: 15px;
+		height: 100%;
+		width: 100%;
+	}
+	
+	.footer__content {
+		width: calc(100% - 30px);
+	}
+}
+
+/* Galaxy Fold etc. width <= 330 */
+@media (max-width: 330px) {
+	.body__form {
+		width: 270px;
+	}
+}
