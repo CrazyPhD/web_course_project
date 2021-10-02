@@ -1,1 +1,2 @@
-# web_course_project
+# ITMO Web Course Project
+## Software Shop
