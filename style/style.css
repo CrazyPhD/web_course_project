@@ -177,6 +177,7 @@ body {
 	display: inline-block;
 	margin-left: 90px;
 	font: normal normal normal 14px/18px "Montserrat Regular";
+	z-index: 999;
 }
 
 .menu__list {
