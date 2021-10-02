@@ -36,6 +36,10 @@ class CDElement {
 		this.element.prepend(element.get());
 	}
 	
+	remove() {
+		this.element.remove();
+	}
+	
 	disable() {
 		this.removeProperty('display');
 		this.addClass('disabled');
@@ -194,6 +198,23 @@ class Dom {
 				(!(container instanceof Element) && !(container instanceof CDElement)))
 			return;
 		(container instanceof CDElement ? container.get() : container).append((element instanceof CDElement ? element.get() : element));
+	}
+	
+	setTitle(title) {
+		document.title = title;
+	}
+	
+	setCookie(name, value, hours) {
+		document.cookie = name + "=" + JSON.stringify(value) + "; path=/; expires=" + (new Date(Date.now() + hours * 3600000).toGMTString());
+	}
+	
+	getCookie(name) {
+		let cookie = {};
+		document.cookie.split(';').forEach(function(el) {
+			let [key,value] = el.split('=');
+			cookie[key.trim()] = value;
+		})
+		return JSON.parse(isEmpty(cookie[name]) ? '[]' : cookie[name]);
 	}
 }
 

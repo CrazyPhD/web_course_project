@@ -8,7 +8,7 @@ let foundCount = 0;
 
 function simulateLoading(result, link) {
 	const min = 300;
-	const max = 1000;
+	const max = 900;
 	setTimeout(() => {
 		result = DOM.create(result, resultsContainer);
 		result.on('click', function() {

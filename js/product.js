@@ -9,14 +9,14 @@ function getPriceLabel(price) {
 }
 
 function renderProduct() {
-	const image = {tag: 'img', cls: 'product__image', attr: [['src', '.'+product.getImage()]]};
+	const image = {tag: 'img', cls: 'product__image', attr: [['src', '.'+product.getImage()], ['alt', product.getName()]]};
 	const imageContainer = {tag: 'div', cls: 'product__image_container', cn: [image]};
 	const title = {tag: 'h3', cls: 'product__title header_text', innerHTML: product.getName()};
 	const desc = {tag: 'div', cls: 'product__desc', innerHTML: product.getDescription()};
 	const info = {tag: 'div', cls: 'product__info', cn: [title, desc]}; 
 	const header = {tag: 'div', cls: 'product__header', cn: [imageContainer, info]};
-	const price = {tag: 'span', cls: 'product__price', innerHTML: getPriceLabel(product.getPrice())};
-	const buy = {tag: 'div', cls: 'product__buy', cn: [price]};
+	const price = {tag: 'span', cls: 'product__price', innerHTML: (cart.checkProduct(product.getID()) ? 'В корзине' : getPriceLabel(product.getPrice()))};
+	const buy = {tag: 'div', cls: 'product__buy' + (cart.checkProduct(product.getID()) ? ' in_cart' : ''), cn: [price]};
 	const link = {tag: 'div', cls: 'product__share_button', cn: [{tag: 'i', cls: 'fas fa-link'}]};
 	const vk = {tag: 'div', cls: 'product__share_button', cn: [{tag: 'i', cls: 'fab fa-vk'}]};
 	const facebook = {tag: 'div', cls: 'product__share_button', cn: [{tag: 'i', cls: 'fab fa-facebook-square'}]};
@@ -29,6 +29,21 @@ function renderProduct() {
 	const card = {tag: 'div', cls: 'product__card', cn: [header, body]};
 	DOM.create(card, container, true);
 	productName.setInnerHTML(product.getName());
+	DOM.setTitle('Магазин софта - ' + product.getName());
+	
+	const button = DOM.get('.product__buy');
+	const priceLabel = DOM.get('.product__price');
+	button.on('click', function() {
+		if (!cart.checkProduct(product.getID())) {
+			cart.addProduct(product);
+			button.addClass('in_cart');
+			priceLabel.setInnerHTML('В корзине');
+		} else {
+			cart.removeProduct(product.getID());
+			button.removeClass('in_cart');
+			priceLabel.setInnerHTML(getPriceLabel(product.getPrice()));
+		}
+	});
 }
 
 renderProduct();

@@ -6,6 +6,7 @@ const menu_button_icon_open = DOM.get('.header__menu_button > .icon-open');
 const cart_counter = DOM.get('.cart__counter');
 const header_menu = DOM.get('.header__menu');
 const header_title = DOM.get('.header__logo > .logo__title');
+const cartButton = DOM.get('.header__cart');
 const mobileWidth = 768;
 
 menu_button.on('click', function() {
@@ -40,3 +41,12 @@ setInterval(function() {
 		header_title.setInnerHTML(innerhtml + '_');
 	}
 }, 700);
+
+cartButton.on('click', function() {
+	window_.get().location = (/products/.test(window_.get().location) ? '.' : '') + './cart.html';
+});
+
+if (cart.getCount() > 0) {
+	cart_counter.setInnerHTML(cart.getCount());
+	cart_counter.removeClass('disabled');
+}

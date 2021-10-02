@@ -34,8 +34,8 @@ function printProducts(sort) {
 			let title = {tag: 'h4', cls: 'header_text product_name', innerHTML: product.getName()};
 			let header = {tag: 'div', cls: 'product_header', cn: [image, title]};
 			let body = {tag: 'div', cls: 'product_body', innerHTML: product.getShortDescription()};
-			let price = {tag: 'span', cls: 'product_price', innerHTML: getPriceLabel(product.getPrice())};
-			let button = {tag: 'div', cls: 'product_add', cn: [price]}
+			let price = {tag: 'span', cls: 'product_price', innerHTML: (cart.checkProduct(product.getID()) ? 'В корзине' : getPriceLabel(product.getPrice()))};
+			let button = {tag: 'div', cls: 'product_add' + (cart.checkProduct(product.getID()) ? ' in_cart' : ''), cn: [price]}
 			let footer = {tag: 'div', cls: 'product_footer', cn: [button]};
 			let card = {tag: 'div', cls: 'products__list_product', cn: [header, body, footer]};
 			card = DOM.create(card, catalog);
@@ -48,7 +48,15 @@ function printProducts(sort) {
 				window_.get().location = product.getLink();
 			});
 			button.on('click', function(e) {
-				console.log(product.getPrice());
+				if (!cart.checkProduct(product.getID())) {
+					cart.addProduct(product);
+					button.addClass('in_cart');
+					price.setInnerHTML('В корзине');
+				} else {
+					cart.removeProduct(product.getID());
+					button.removeClass('in_cart');
+					price.setInnerHTML(getPriceLabel(product.getPrice()));
+				}
 			});
 		}
 	});

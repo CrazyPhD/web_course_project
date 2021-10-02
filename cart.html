@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>Магазин софта - Каталог</title>
+		<title>Магазин софта - Корзина</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1" /> 
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<link rel="stylesheet" href="./style/fonts.css" />
@@ -21,7 +21,7 @@
 			<nav class="header__menu">
 				<ul class="menu__list">
 					<li class="menu__list_option"><a class="option__link" href="./index.html">Главная</a></li>
-					<li class="menu__list_option active"><a class="option__link" href="./catalog.html">Каталог</a></li>
+					<li class="menu__list_option"><a class="option__link" href="./catalog.html">Каталог</a></li>
 					<li class="menu__list_option"><a class="option__link" href="./about.html">О нас</a></li>
 					<li class="menu__list_option"><a class="option__link" href="./search.html">Поиск</a></li>
 					<li class="menu__list_option"><a class="option__link" href="./contact.html">Контакты</a></li>
@@ -37,12 +37,12 @@
 			</div>
 		</div>
 		<div class="body">
-			<div class="body__title_catalog">
-				<h1 class="header_text header_catalog">Каталог</h1>
-				<div class="products__filter">Фильтр по цене <i class="products__filter_icon fas fa-sort-amount-down-alt"></i></div>
-			</div>
+			<div class="body__title"><h1 class="header_text">Корзина</h1></div>
 			<div class="body__content">
-				<div class="products__list"></div>
+				<div class="cart__content">
+					Ваша корзина пуста. Зайдите в <a class="content__link" href="./catalog.html">каталог</a> или воспользуйтесь <a class="content__link" href="./search.html">поиском</a>, чтобы найти товары и добавить их в корзину.
+					<div class="cart__empty"></div>
+				</div>
 			</div>
 		</div>
 		<div class="footer">
@@ -69,6 +69,6 @@
 			</div>
 		</div>
 		<script src="./js/page.js"></script>
-		<script src="./js/catalog.js"></script>
+		<script src="./js/cart_page.js"></script>
 	</body>
 </html>
