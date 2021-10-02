@@ -182,4 +182,4 @@ class Dom {
 }
 
 const DOM = new Dom();
-const window_ = DOM.get('window');
+const window_ = new CDElement(window);
