@@ -1,0 +1,96 @@
+- var page = page
+doctype html
+html(lang='ru')
+    head
+        title Магазин софта - !{title}
+        meta(name='viewport' content='width=device-width, initial-scale=1')
+        meta(http-equiv='Content-Type' content='text/html; charset=UTF-8')
+        link(rel='stylesheet' href='/style/fonts.css')
+        link(rel='stylesheet' href='/style/style.css')
+        link(rel='stylesheet' href='/style/mobile.css')
+        link(rel='stylesheet' href='/style/css/fa.css')
+        script(src='/js/CDFramework.js')
+        script(src='/js/db.js')
+        script(src='/js/cart.js')
+        if page === 'product'
+            script.
+                var PRODUCT_ID = !{productId}; // TODO: remove
+    body
+        header.header
+            .header__logo
+                .logo__icon
+                .logo__title SOFTWARE SHOP
+            nav.header__menu
+                ul.menu__list
+                    li(class='menu__list_option', class={'active': page === 'index'})
+                        a.option__link(href='/') Главная
+                    li(class='menu__list_option', class={'active': page === 'catalog'})
+                        a.option__link(href='/catalog') Каталог
+                    li(class='menu__list_option', class={'active': page === 'about'})
+                        a.option__link(href='/about') О нас
+                    li(class='menu__list_option', class={'active': page === 'search'})
+                        a.option__link(href='/search') Поиск
+                    li(class='menu__list_option', class={'active': page === 'contact'})
+                        a.option__link(href='/contact') Контакты
+            .header__cart
+                i.fas.fa-shopping-cart
+                .cart__counter.disabled
+            .header__menu_button
+                i.fas.fa-bars.icon-open
+                i.fas.fa-times.icon-close
+        main.body
+            case page
+                when 'catalog'
+                    include includes/catalog_body_title.pug
+                when 'product'
+                    include includes/product_body_title.pug
+                default
+                    .body__title
+                        h1.header_text !{title}
+            .body__content
+                case page
+                    when 'index'
+                        include includes/index.pug
+                    when 'catalog'
+                        include includes/catalog.pug
+                    when 'about'
+                        include includes/about.pug
+                    when 'search'
+                        include includes/search.pug
+                    when 'contact'
+                        include includes/contact.pug
+                    when 'cart'
+                        include includes/cart.pug
+                    when 'product'
+                        include includes/product.pug
+        footer.footer
+            .footer__content
+                .footer__content_left
+                    .footer__logo
+                        .logo__icon
+                        .logo__title SOFTWARE SHOP
+                    nav.footer__nav
+                        ul.footer__nav_list
+                            li.nav__list_element
+                                a.footer__option_link(href='/') Главная
+                            li.nav__list_element
+                                a.footer__option_link(href='/catalog') Каталог
+                            li.nav__list_element
+                                a.footer__option_link(href='/about') О нас
+                            li.nav__list_element
+                                a.footer__option_link(href='/search') Поиск
+                            li.nav__list_element
+                                a.footer__option_link(href='/contact') Контакты
+                .footer__content_middle
+                .footer__content_right
+                    span.footer__copyright © 2021 CrazyDoctor
+        script(src='/js/page.js')
+        case page
+            when 'catalog'
+                script(src='/js/catalog.js')
+            when 'search'
+                script(src='/js/search.js')
+            when 'product'
+                script(src='/js/product.js')
+            when 'cart'
+                script(src='/js/cart_page.js')

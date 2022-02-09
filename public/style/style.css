@@ -622,7 +622,7 @@ body {
 	background-position: center;
 	background-repeat: no-repeat;
 	background-size: contain;
-	background-image: url(../img/loading-buffering.gif);
+	background-image: url(/img/loading-buffering.gif);
 }
 
 .cart__content {
@@ -635,7 +635,7 @@ body {
 	background-size: contain;
 	background-repeat: no-repeat;
 	background-position: center;
-	background-image: url(../img/empty_cart.png);
+	background-image: url(/img/empty_cart.png);
 }
 
 .cart__product {

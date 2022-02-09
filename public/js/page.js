@@ -30,7 +30,7 @@ window_.on('resize', function() {
 });
 
 DOM.get('.header__logo').on('click', function() {
-	window_.get().location = (/products/.test(window_.get().location) ? '.' : '') + './index.html';
+	window_.get().location = '/';
 });
 
 setInterval(function() {
@@ -43,7 +43,7 @@ setInterval(function() {
 }, 700);
 
 cartButton.on('click', function() {
-	window_.get().location = (/products/.test(window_.get().location) ? '.' : '') + './cart.html';
+	window_.get().location = '/cart';
 });
 
 if (cart.getCount() > 0) {

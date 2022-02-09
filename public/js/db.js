@@ -81,6 +81,10 @@ class Product extends Record {
 	getImage(url) {
 		return this.image;
 	}
+
+	getLink() {
+		return '/product/' + this.getID();
+	}
 }
 
 class Page extends Record {
