@@ -1,11 +1,19 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const models = require('./models');
+const { Pool } = require('pg');
 
 
 class Application {
-    constructor() {
+    constructor(pg) {
         this.app = express();
+        this.pool = new Pool({
+            user: pg.user,
+            host: pg.host,
+            database: pg.database,
+            password: pg.password,
+            port: pg.port,
+        })
         this.manager = new models.ProductManager();
         this.attachRoutes();
     }
@@ -13,7 +21,6 @@ class Application {
     attachRoutes() {
         let app = this.app;
         let jsonParser = bodyParser.json();
-
 
         app.use(express.static(__dirname + '/../public'));
         app.set('views', __dirname + '/views');
@@ -52,6 +59,10 @@ class Application {
 
     getApp() {
         return this.app;
+    }
+
+    getPool() {
+        return this.pool;
     }
 }
 
