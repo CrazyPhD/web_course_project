@@ -47,7 +47,7 @@ class Application {
 
     getProductHandler(req, res) {
         res.status(200).type('text/html');
-        res.render('page', {page: 'product', title: 'Какой-то продукт', productId: req.params.productId});
+        res.render('page', {page: 'product', productId: req.params.productId});
     }
 
     getApp() {
