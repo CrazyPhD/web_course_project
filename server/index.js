@@ -4,4 +4,4 @@ const config = require('./config.json');
 
 let app = new Application();
 
-app.expressApp.listen(config.port, config.host);
+app.getApp().listen(config.port, config.host);

@@ -49,6 +49,10 @@ class Application {
         res.status(200).type('text/html');
         res.render('page', {page: 'product', title: 'Какой-то продукт', productId: req.params.productId});
     }
+
+    getApp() {
+        return this.app;
+    }
 }
 
 module.exports = Application;
