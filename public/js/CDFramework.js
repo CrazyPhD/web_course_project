@@ -109,7 +109,35 @@ class CDElement {
 		this.element.classList.remove(cls);
 		return this;
 	}
-	
+
+	hasClass(cls) {
+		if (isEmpty(this.element.classList))
+			return false;
+		let has = false;
+		this.element.classList.forEach((c) => {
+			if (c === cls) has = true;
+		});
+		return has;
+	}
+
+	removeClass(cls) {
+		if (isEmpty(cls))
+			return this;
+		this.element.classList.remove(cls);
+		return this;
+	}
+
+	switchClass(cls) {
+		return this.hasClass(cls) ? this.removeClass(cls) : this.addClass(cls);
+	}
+
+	setProperty(prop, val, priority) {
+		if (isEmpty(prop))
+			return this;
+		this.element.style.setProperty(prop, val, priority);
+		return this;
+	}
+
 	removeProperty(prop) {
 		if (isEmpty(prop))
 			return this;
