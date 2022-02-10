@@ -3,9 +3,10 @@
   "port": 80,
   "pg": {
       "host": "localhost",
+      "port": 4242,
       "user": "username",
       "password": "password",
       "database": "database",
-      "port": 4242
+      "schema": "public"
   }
 }

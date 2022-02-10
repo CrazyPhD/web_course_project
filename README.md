@@ -5,6 +5,8 @@
 * Before you start, create the configuration file `server/config.json`
   (see an example `server/config.json.default`)
 
-* Next, open a terminal in the root directory of the project and run:
+* If your postgres user **is not** a superuser, install manually extension `uuid-ossp` for your database. Otherwise, skip this step.
 
-  `npm install & npm start`
+* Open a terminal in the root directory of the project and run:
+
+  `npm install & npm run setup & npm start`

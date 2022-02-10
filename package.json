@@ -4,7 +4,8 @@
   "description": "ITMO Web Course Project",
   "main": "server/index.js",
   "scripts": {
-    "start": "node server/index.js"
+    "start": "node server/index.js",
+    "setup": "node server/setup.js"
   },
   "repository": {
     "type": "git",
