@@ -1,0 +1,12 @@
+- var message = message;
+form(action='/login' method='POST')
+    label(for='username') E-Mail:
+    input#username(type='text' name='username' autocomplete='off')
+    br
+    label(for='password') Пароль:
+    input#password(type='password' name='password')
+    br
+    if message != null
+        p #{message}
+    br
+    input.submitButton(type='submit' value='Войти')
