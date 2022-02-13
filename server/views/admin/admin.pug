@@ -1,0 +1,65 @@
+doctype html
+html(lang='ru')
+    head
+        title Магазин софта - Админ-панель
+        meta(name='viewport' content='width=device-width, initial-scale=1')
+        meta(http-equiv='Content-Type' content='text/html; charset=UTF-8')
+        script(src='/js/CDFramework.js')
+        style(type="text/css").
+            a:visited {
+                color: #0000EE;
+            }
+            table, th, tr, td {
+                border: 1px solid;
+            }
+            table {
+                border-collapse: collapse;
+                width: 100%;
+            }
+            .products__list {
+                width: 50%;
+                overflow-y: auto;
+                overflow-x: hidden;
+                max-height: 400px;
+            }
+    body
+        h1 Админ-панель
+        .admin_links
+            a(href='/') Главная
+            br
+            a(href='/admin/addproduct') Добавить товар
+        h2 Список товаров
+        .products__list
+            br
+            table.products__list_table
+                tr
+                    th Название
+                    th Цена
+                    th Количество
+                    th
+        script.
+            fetch('/api/products', {
+                method: "POST",
+                body: JSON.stringify({
+                    fields: ['productId', 'name', 'count', 'price'],
+                    orderby: 'name'
+                }),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(
+                response => response.json()
+            ).then(
+                response => {
+                    if (response.success) {
+                        const table = DOM.get('.products__list_table > tbody');
+                        response.products.forEach((product) => {
+                            const productName = { tag: 'td', innerHTML: product.name };
+                            const productPrice = { tag: 'td', innerHTML: product.price };
+                            const productCount = { tag: 'td', innerHTML: product.count };
+                            const productLink = { tag: 'td', cn: [{ tag: 'a', attr: [['href', '/admin/editproduct/'+product.productid], ['target', '_blank']], innerHTML: 'Редактировать' }] };
+                            DOM.create({ tag: 'tr', cn: [productName, productPrice, productCount, productLink] }, table);
+                        });
+                    }
+                }
+            );

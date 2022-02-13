@@ -1,15 +1,28 @@
 - var message = message;
-form(action='/register' method='POST')
-    label(for='username') E-Mail:
-    input#username(type='text' name='username' autocomplete='off')
-    br
-    label(for='password') Пароль:
-    input#password(type='password' name='password')
-    br
-    label(for='passConf') Подтверждение пароля:
-    input#passConf(type='password' name='passConf')
-    br
-    if message != null
-        p #{message}
-    br
-    input.submitButton(type='submit' value='Зарегистрироваться')
+.login__block
+    .login__block_inner
+        h1.header_text Регистрация
+        form.login__form(action='/register' method='POST')
+            label(for='login') E-Mail:
+            input#login.text_input(type='text' name='login' autocomplete='off')
+            br
+            label(for='firstName') Имя:
+            input#firstName.text_input(type='text' name='firstName' autocomplete='off')
+            br
+            label(for='lastName') Фамилия:
+            input#lastName.text_input(type='text' name='lastName' autocomplete='off')
+            br
+            label(for='password') Пароль:
+            input#password.text_input(type='password' name='password')
+            br
+            label(for='passConf') Подтверждение пароля:
+            input#passConf.text_input(type='password' name='passConf')
+            if message != null
+                p.login__errors #{message}
+            .login__form_submit_container
+                input.submit_button.register(type='submit' value='Зарегистрироваться')
+        br
+        .login__register_message
+            | Если у Вас уже есть аккаунт,&nbsp;
+            a.content__link(href='/login') авторизируйтесь
+            | .

@@ -7,6 +7,8 @@ const cart_counter = DOM.get('.cart__counter');
 const header_menu = DOM.get('.header__menu');
 const header_title = DOM.get('.header__logo > .logo__title');
 const cartButton = DOM.get('.header__cart');
+const profileButton = DOM.get('.header__profile');
+const logoutButton = DOM.get('.header__logout');
 const mobileWidth = 768;
 
 menu_button.on('click', function() {
@@ -45,6 +47,16 @@ setInterval(function() {
 cartButton.on('click', function() {
 	window_.get().location = '/cart';
 });
+
+profileButton.on('click', function() {
+	window_.get().location = '/profile';
+});
+
+if (logoutButton != null) {
+	logoutButton.on('click', function () {
+		window_.get().location = '/logout';
+	});
+}
 
 if (cart.getCount() > 0) {
 	cart_counter.setInnerHTML(cart.getCount());

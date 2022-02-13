@@ -1,7 +1,5 @@
 'use strict';
 
-/* Database simulation */
-
 class Record {
 	constructor(name, id) {
 		this.name = name;
@@ -113,7 +111,7 @@ class DB {
 	
 	formRecord(config) {
 		const isProduct = config.type === 'Product';
-		let obj = (isProduct ? new Product(config.name, this.nextID()) : new Page(config.name, this.nextID()));
+		let obj = (isProduct ? new Product(config.name, config.id) : new Page(config.name, this.nextID()));
 		if (!isEmpty(config.keywords)) obj.setKeywords(config.keywords);
 		if (!isEmpty(config.price) && isProduct) obj.setPrice(config.price);
 		if (!isEmpty(config.image) && isProduct) obj.setImage(config.image);
@@ -122,7 +120,7 @@ class DB {
 		if (!isEmpty(config.shortdesc)) obj.setShortDescription(config.shortdesc);
 		return obj;
 	}
-	
+
 	addProduct(config) {
 		if (config.type !== 'Product')
 			return;
@@ -136,50 +134,126 @@ class DB {
 	}
 	
 	find(q) {
-		if (isEmpty(q) || q.length < 2)
-			return [];
-		
-		let found = [];
-		const rx = new RegExp(q, 'i');
-		
-		[this.products, this.pages].forEach((records) => { 
-			records.forEach((record) => {
-				if (rx.test(record.getName()) ||
+		return fetch('/api/products', {
+			method: "POST",
+			body: JSON.stringify({
+				fields: ['*'],
+				where: 'name ILIKE \'%'+q+'%\' OR description ILIKE \'%'+q+'%\' OR keywords ILIKE \'%'+q+'%\''
+			}),
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		}).then(
+			response => response.json()
+		).then(response => {
+			if (!response.success)
+				return null;
+			const rx = new RegExp(q, 'i');
+			let found = response.products.map(product =>
+				this.formRecord({
+					type: 'Product',
+					name: product.name,
+					image: product.image,
+					id: product.productid,
+					keywords: product.keywords,
+					shortdesc: product.shortdesc,
+					description: product.description,
+					price: product.price
+				})
+			);
+			[this.pages].forEach((records) => {
+				records.forEach((record) => {
+					if (rx.test(record.getName()) ||
 						rx.test(record.getDescription()) ||
 						rx.test(record.getKeywords()))
-					found.push(record);
+						found.push(record);
+				});
 			});
+			return found;
 		});
-		return found;
 	}
 	
 	getProducts(sort) {
-		let sorted = [];
-		switch(sort) {
-			case 'asc':
-				sorted = [...this.products].sort((a, b) => {return a.getPrice() - b.getPrice()});
-				return sorted;
-			case 'desc':
-				sorted = [...this.products].sort((a, b) => {return b.getPrice() - a.getPrice()});
-				return sorted;
-			default:
-				return this.products;
-		}
+		return fetch('/api/products', {
+			method: "POST",
+			body: JSON.stringify({
+				fields: ['*'],
+				orderby: 'price',
+				asc: sort == 'asc'
+			}),
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		}).then(
+			response => response.json()
+		).then(response => {
+			if (!response.success)
+				return null;
+			return response.products.map(product =>
+				this.formRecord({
+					type: 'Product',
+					name: product.name,
+					image: product.image,
+					id: product.productid,
+					keywords: product.keywords,
+					shortdesc: product.shortdesc,
+					description: product.description,
+					price: product.price
+				})
+			);
+		});
 	}
 	
 	getProduct(id) {
-		return this.products[id];
+		return fetch('/api/products', {
+			method: "POST",
+			body: JSON.stringify({
+				fields: ['*'],
+				where: Array.isArray(id) ? id.map(i => 'productId=\''+i+'\'').join(' OR ') : 'productId=\''+id+'\''
+			}),
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		}).then(
+			response => response.json()
+		).then(response => {
+			let answer = null;
+			if (!response.success)
+				return answer;
+			if (Array.isArray(id)) {
+				const infos = response.products;
+				answer = infos.map(i =>
+					this.formRecord({
+						type: 'Product',
+						name: i.name,
+						image: i.image,
+						id: i.productid,
+						keywords: i.keywords,
+						shortdesc: i.shortdesc,
+						description: i.description,
+						price: i.price
+					})
+				);
+			} else {
+				const info = response.products[0];
+				const record = this.formRecord({
+					type: 'Product',
+					name: info.name,
+					image: info.image,
+					id: info.productid,
+					keywords: info.keywords,
+					shortdesc: info.shortdesc,
+					description: info.description,
+					price: info.price
+				});
+				answer = record;
+			}
+			return answer;
+		});
 	}
 }
 
 const db = new DB();
-
-db.add({type: 'Product', name: 'Поиск подпалиндромов', image: './img/palindrome.png', link: './products/subpalindromes.html', keywords: 'all,подпалиндромы,палиндромы,поиск,алгоритм,PHP,JavaScript', shortdesc: 'Инструмент для поиска подпалиндромов в строке, используя алгоритм Манакера.', description: 'Инструмент для поиска подпалиндромов в строке. Используется алгоритм Манакера, как наиболее эффективный из всех известных.', price: 9000});
-db.add({type: 'Product', name: 'Кубик рубика (C, OpenGL)', image: './img/rubick.png', link: './products/rubick.html', keywords: 'all,игра,головоломка,кубик,рубик,C,OpenGL', shortdesc: 'Десктопное приложение, позволяющее собирать кубик рубика как самостоятельно, так и автоматически.', description: 'Десктопное приложение, позволяющее собирать кубик рубика как самостоятельно, так и автоматически с последующим выведением формулы сборки. Применяются кратчайшие ходы сборки из любого состояния.', price: 15000});
-db.add({type: 'Product', name: 'Игра "Жизнь" (C)', image: './img/game.png', link: './products/conways_life_game.html', keywords: 'all,игра,жизнь,conway,C', shortdesc: 'Игра "Жизнь" Конвея на BMP.', description: 'Десктопное приложение, позволяющее генерировать из исходного черно-белого BMP-файла необходимое количество поколений игры "Жизнь".', price: 5000});
-db.add({type: 'Product', name: 'Двойной маятник', image: './img/double_pendulum.png', link: './products/double_pendulum.html', keywords: 'all,физика,маятник,двойной,C,JavaScript', shortdesc: 'Десктопное приложение, представляющее собой физическую модель двойного маятника.', description: 'Десктопное приложение, представляющее собой физическую модель двойного маятника с отрисовкой траектории.', price: 8000});
-db.add({type: 'Product', name: 'Баллистическое движение', image: './img/ballistic.bmp', link: './products/ballistic.html', keywords: 'all,физика,баллистика,выстрел,цель,C', shortdesc: 'Десктопное приложение, представляющее собой физическую модель баллистического движения.', description: 'Десктопное приложение, представляющее собой физическую модель баллистического движения с отрисовкой траектории движения снаряда, а также с возможностью постановки цели для выстрела. На выходе получается BMP-файл с траекторией и масштабной сеткой.', price: 9000});
-db.add({type: 'Product', name: 'Нонограмма', image: './img/nonogram.png', link: './products/nonogram.html', keywords: 'all,игра,головоломка,нонограмма,nonogram,Java', shortdesc: 'Десктопное приложение, представляющее собой игру - нонограмму.', description: 'Десктопное приложение, представляющее собой игру - нонограмму. Доступные режимы 10x10, 15x15. Присутствует система рекордов (по времени решения нонограмм), ведение статистики (количество решенных нонограмм, количество ошибок и проигрышей).', price: 25000});
 
 db.add({type: 'Page', name: 'О нас', shortdesc: 'Страница с информацией о компании Software Shop.', description: 'Страница с информацией о компании Software Shop.', link: './about.html', keywords: 'all,магазин,софта,программное,обеспечение'});
 db.add({type: 'Page', name: 'Контакты', shortdesc: 'Страница с контактной информацией: телефоны и карта с офисом.', description: 'Страница с контактной информацией: телефоны и карта с офисом.', link: './contact.html', keywords: 'all,адрес,контакты,контакт'});

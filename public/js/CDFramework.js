@@ -188,7 +188,7 @@ class Dom {
 			throw "Dom.get() invalid selector.";
 		let element = document.querySelector(selector);
 		if (isEmpty(element))
-			throw "Dom.get() nothing is found for '" + selector + "'";
+			return null;
 		return new CDElement(document.querySelector(selector));
 	}
 	

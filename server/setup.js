@@ -43,7 +43,7 @@ function setup() {
     let ordersInitialized = false;
 
     const queryUuidOssp = 'CREATE EXTENSION IF NOT EXISTS "uuid-ossp";';
-    const productsQuery = "CREATE TABLE IF NOT EXISTS "+schema+".products (productId uuid DEFAULT uuid_generate_v4 (), name VARCHAR(64) NOT NULL, description TEXT NOT NULL, shortdesc TEXT NOT NULL, image bytea, keywords TEXT, price INTEGER NOT NULL, PRIMARY KEY (productId));";
+    const productsQuery = "CREATE TABLE IF NOT EXISTS "+schema+".products (productId uuid DEFAULT uuid_generate_v4 (), name VARCHAR(64) NOT NULL, description TEXT NOT NULL, shortdesc TEXT NOT NULL, image bytea, keywords TEXT, price INTEGER NOT NULL, count INTEGER DEFAULT 0, PRIMARY KEY (productId));";
     const usersQuery = "CREATE TABLE IF NOT EXISTS "+schema+".users (userId uuid DEFAULT uuid_generate_v4 (), login VARCHAR(128) NOT NULL, password VARCHAR(256) NOT NULL, firstName VARCHAR(32), lastName VARCHAR(32), cart JSON, orders JSON, is_admin BOOLEAN DEFAULT false, PRIMARY KEY (userId), UNIQUE (login));";
     const ordersQuery = "CREATE TABLE IF NOT EXISTS "+schema+".orders (orderId uuid DEFAULT uuid_generate_v4 (), customerId uuid NOT NULL, orderList JSON, status INTEGER DEFAULT 0, PRIMARY KEY (orderId))";
 

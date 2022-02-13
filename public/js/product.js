@@ -1,6 +1,5 @@
 'use strict';
 
-const product = db.getProduct(PRODUCT_ID);
 const productName = DOM.get('.product__name');
 const container = DOM.get('.body__content');
 const currency = 'руб.';
@@ -8,8 +7,8 @@ function getPriceLabel(price) {
 	return price + " " + currency;
 }
 
-function renderProduct() {
-	const image = {tag: 'img', cls: 'product__image', attr: [['src', '.'+product.getImage()], ['alt', product.getName()]]};
+function renderProduct(product) {
+	const image = {tag: 'img', cls: 'product__image', attr: [['src', product.getImage()], ['alt', product.getName()]]};
 	const imageContainer = {tag: 'div', cls: 'product__image_container', cn: [image]};
 	const title = {tag: 'h3', cls: 'product__title header_text', innerHTML: product.getName()};
 	const desc = {tag: 'div', cls: 'product__desc', innerHTML: product.getDescription()};
@@ -46,4 +45,4 @@ function renderProduct() {
 	});
 }
 
-renderProduct();
+db.getProduct(PRODUCT_ID).then(product => renderProduct(product));

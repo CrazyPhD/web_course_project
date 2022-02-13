@@ -1,0 +1,68 @@
+- var product = product;
+- var edit = product != null;
+doctype html
+html(lang='ru')
+    head
+        title Магазин софта - Админ-панель
+        meta(name='viewport' content='width=device-width, initial-scale=1')
+        meta(http-equiv='Content-Type' content='text/html; charset=UTF-8')
+        style(type="text/css").
+            a:visited {
+                color: #0000EE;
+            }
+    body
+        h1
+            a(href='/admin') Админ-панель
+            | &nbsp;> Добавление товара
+        form(enctype='multipart/form-data' action=(edit ? '/admin/editproduct/' + product.id : '/admin/addproduct') method='POST')
+            label(for='name') Название:
+            br
+            input#name(type='text' name='name' size='30' autocomplete='off' value=(edit ? product.name : ''))
+            br
+            br
+            label(for='price') Цена:
+            br
+            input#price(type='text' name='price' size='30' autocomplete='off' value=(edit ? product.price : ''))
+            | &nbsp;руб.
+            br
+            br
+            if edit
+                input(type='text' name='oldImage' style='display: none;' value=(product.image || ''))
+                span Текущее изображение:
+                br
+                img(src=`${product.image}` width='200')
+                br
+            label(for='img')
+                if edit
+                    | Новое изображение:
+                else
+                    | Изображение:
+            br
+            input#img(type='file' name='img' size='30' accept='.jpg,.jpeg,.png,.bmp')
+            br
+            br
+            label(for='keywords') Keywords:
+            br
+            input#keywords(type='text' name='keywords' size='30' autocomplete='off' value=(edit ? product.keywords : ''))
+            br
+            br
+            label(for='count') Количество:
+            br
+            input#count(type='text' name='count' size='30' autocomplete='off' value=(edit ? product.count : ''))
+            br
+            br
+            label(for='shortdesc') Краткое описание:
+            br
+            textarea#shortdesc(name='shortdesc' cols='30' rows='10')
+                if edit
+                    | #{product.shortdesc}
+            br
+            br
+            label(for='description') Полное описание:
+            br
+            textarea#description(name='description' cols='30' rows='10')
+                if edit
+                    | #{product.description}
+            br
+            br
+            input(type='submit' value=(edit ? 'Изменить' : 'Добавить'))
