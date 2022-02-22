@@ -707,6 +707,22 @@ body {
 	font-weight: 900;
 }
 
+.cart__checkout {
+	background-color: #1082D2;
+	color: #FFFFFF;
+	font-weight: 900;
+	padding: 15px 10px;
+	width: fit-content;
+	float: right;
+	margin-top: 15px;
+	border-radius: 8px;
+}
+
+.cart__checkout:hover {
+	cursor: pointer;
+	background-color: #0d79c5;
+}
+
 .cart__product_title {
 	margin-bottom: 15px;
 }
@@ -775,4 +791,13 @@ body {
 
 .login__block_inner > .login__form > .login__errors {
 	color: #d70000;
+}
+
+.profile__confirmation {
+	color: #983d3d;
+	font-weight: 900;
+}
+
+.profile__confirmation.confirmed {
+	color: #0b8a3c;
 }

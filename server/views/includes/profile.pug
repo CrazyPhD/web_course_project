@@ -1,3 +1,34 @@
-- var user = user;
 .profile
-    p #{user.login}
+    p #{user.firstName} #{user.lastName}
+    p Email: #{user.login}
+    p
+    if user.confirmed
+        |
+        span.profile__confirmation.confirmed Учетная запись подтверждена.
+    else
+        |
+        span.profile__confirmation
+            | Учетная запись не подтверждена,&nbsp;
+            a(id="confirm" href="/confirm") подтвердить
+            | .
+        script.
+            DOM.get("#confirm").on('click', (e) => {
+                e.preventDefault();
+                fetch('/api/send_confirmation', {
+                    method: "POST",
+                    body: JSON.stringify({
+                        id: '#{user.id}'
+                    }),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }).then(
+                    response => response.json()
+                ).then(
+                    response => {
+                        if (response.success) {
+                            DOM.get(".profile__confirmation").addClass('confirmed').setInnerHTML("На Ваш e-mail <b>#{user.login}</b> было отправлено письмо с ссылкой подтверждения профиля.");
+                        }
+                    }
+                );
+            });

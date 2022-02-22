@@ -1,5 +1,6 @@
 - var page = page
 - var user = user
+- var year = new Date().getFullYear();
 doctype html
 html(lang='ru')
     head
@@ -100,7 +101,7 @@ html(lang='ru')
                                 a.footer__option_link(href='/contact') Контакты
                 .footer__content_middle
                 .footer__content_right
-                    span.footer__copyright © 2021 CrazyDoctor
+                    span.footer__copyright © #{year} CrazyDoctor
         script(src='/js/page.js')
         case page
             when 'catalog'

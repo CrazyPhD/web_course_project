@@ -7,9 +7,10 @@ const { Pool } = require('pg');
 const session = require('express-session');
 const flash = require('connect-flash')
 const LocalStrategy = require('passport-local').Strategy;
+const mailer = require('nodemailer');
 
 class Application {
-    constructor(pg, session_secret) {
+    constructor(pg, mail, session_secret) {
         this.app = express();
         this.pool = new Pool({
             user: pg.user,
@@ -21,6 +22,14 @@ class Application {
         this.schema = pg.schema;
         this.session_secret = session_secret;
         this.manager = new models.ProductManager();
+        this.mailUser = mail.user;
+        this.mailTransporter = mailer.createTransport({
+            service: mail.service,
+            auth: {
+                user: mail.user,
+                pass: mail.pass
+            }
+        });
 
         this.app.api = (request, handler, next) => {
             const url = '/api/'+request;
@@ -72,6 +81,7 @@ class Application {
 
         app.get('/profile', this.getProfileHandler.bind(this));
         app.get('/logout', this.getLogoutHandler.bind(this));
+        app.get('/confirm/:verification', this.getConfirmHandler.bind(this));
         app.get('/admin', this.getAdminHandler.bind(this));
 
         app.get('/admin/addproduct', this.getAdminAddProductHandler.bind(this));
@@ -309,6 +319,22 @@ class Application {
         res.render('page', config);
     }
 
+    getConfirmHandler(req, res) {
+        const pool = this.pool;
+        const schema = this.schema;
+
+        pool.query('SELECT login, confirmed FROM '+schema+'.users WHERE verification=($1)', [req.params.verification], (err, result) => {
+            if (err || result.rowCount === 0) {
+                console.log(err || "DB error.");
+                res.redirect("/");
+            }
+            let config = { page: 'confirm', verification: req.params.verification };
+            if (req.isAuthenticated()) config.user = req.user;
+            res.status(200).type('text/html');
+            res.render('page', config);
+        });
+    }
+
     getApp() {
         return this.app;
     }
@@ -363,7 +389,7 @@ class Application {
             },
             function(req, login, password, done) {
                 try {
-                    pool.query('SELECT userId, login, password, firstName, lastName, cart, orders, is_admin FROM '+schema+'.users WHERE login=$1', [login], (err, result) => {
+                    pool.query('SELECT userid, login, password, firstname, lastname, cart, orders, confirmed, is_admin FROM '+schema+'.users WHERE login=$1', [login], (err, result) => {
                         if (err) return done(err);
                         const user = result.rows[0];
                         if (user == null) {
@@ -373,7 +399,7 @@ class Application {
                                 if (err) return done(err);
                                 if (valid) {
                                     console.log(req.body.login + ' -> login');
-                                    let config = { id: user.userId, login: user.login, firstName: user.firstName, lastName: user.lastName, cart: user.cart, orders: user.orders };
+                                    let config = { id: user.userid, login: user.login, firstName: user.firstname, lastName: user.lastname, confirmed: user.confirmed, cart: user.cart, orders: user.orders };
                                     if (user.is_admin === true) config.is_admin = true;
                                     return done(null, config);
                                 } else {
@@ -393,6 +419,8 @@ class Application {
             },
             function(req, login, password, done) {
                 try {
+                    if (!/[a-z0-9!#$%&'*+\/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+\/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/.test(login))
+                        return done(null, false, req.flash('message', "Неверно введен E-Mail."));
                     bcrypt.hash(req.body.password, 8, (err, passHash) => {
                         if (err) {
                             console.log(err);
@@ -411,7 +439,8 @@ class Application {
                                                 id: result.rows[0].userId,
                                                 login: req.body.login,
                                                 firstName: req.body.firstName,
-                                                lastName: req.body.lastName
+                                                lastName: req.body.lastName,
+                                                confirmed: result.rows[0].confirmed
                                             });
                                         }
                                     });
@@ -445,19 +474,47 @@ class Application {
                     ((params.limit && (params.limit > 0)) ? 'LIMIT ' + params.limit + ' ' : '') +
                     ((params.page && (params.page > 0)) ? 'OFFSET ' + (params.limit * (params.page - 1)) : ''),
                 (err, result) => {
-                    if (err) {
-                        console.log(err);
-                        res.send(JSON.stringify(answer));
-                    } else {
+                    if (err) console.log(err);
+                    else {
                         answer.success = true;
                         answer.products = result.rows;
                         answer.products.forEach((product) => {
-                            product.image = Buffer.from(product.image, 'binary').toString('utf8');
+                            if (product.image)
+                                product.image = Buffer.from(product.image, 'binary').toString('utf8');
                         });
-                        res.send(JSON.stringify(answer));
                     }
+                    res.send(JSON.stringify(answer));
                 }
             );
+        });
+
+        app.api('send_confirmation', (req, res) => {
+            const params = req.body;
+            const pool = this.pool;
+            const schema = this.schema;
+            const origin = req.header('Origin');
+            let answer = { success: false };
+            res.status(200).type('text/json');
+            pool.query('SELECT login, verification FROM '+schema+'.users WHERE userId=($1)', [params.id], (err, result) => {
+                if (err) console.log(err);
+                else if (result.rowCount === 0) console.log("User with id `" + params.id + "` not found.");
+                else {
+                    const mailConfig = {
+                        from: '"Магазин Софта" <' + this.mailUser + '>',
+                        to: result.rows[0].login,
+                        subject: 'Подтверждение профиля',
+                        html: '<p>Добро пожаловать в Магазин Софта!</p><p>Подтвердите свой профиль, перейдя по <a href="'+origin+'/confirm/'+result.rows[0].verification+'">ссылке</a>.</p>'
+                    };
+                    this.mailTransporter.sendMail(mailConfig, (err, info) => {
+                        if (err) console.log(err);
+                        else {
+                            answer.success = true;
+                            console.log('Email sent: ' + info.response);
+                        }
+                        res.send(JSON.stringify(answer));
+                    });
+                }
+            });
         });
     }
 }

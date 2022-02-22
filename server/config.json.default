@@ -9,5 +9,10 @@
       "password": "password",
       "database": "database",
       "schema": "public"
+  },
+  "mail": {
+      "service": "gmail",
+      "user": "username",
+      "pass": "password"
   }
 }

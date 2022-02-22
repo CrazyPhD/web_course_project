@@ -43,6 +43,10 @@ function renderCart() {
 			let cartSummary = {tag: 'div', cls: 'cart__summary', innerHTML: 'Итого: ' + getPriceLabel(sum)};
 			DOM.create(productsContainer, cartContainer);
 			DOM.create(cartSummary, cartContainer);
+			let checkoutButton = DOM.create({tag: 'div', cls: 'cart__checkout', innerHTML: 'Оформить заказ' }, cartContainer);
+			checkoutButton.on('click', function() {
+				console.log('Оформ');
+			});
 		});
 	} else {
 		cartContainer.setInnerHTML('Ваша корзина пуста.<br/>Зайдите в <a class="content__link" href="/catalog">каталог</a> или воспользуйтесь <a class="content__link" href="./search">поиском</a>, чтобы найти товары и добавить их в корзину.<div class="cart__empty"></div>');
