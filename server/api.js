@@ -1,4 +1,7 @@
-function apiConfig(app, pool, schema) {
+function apiConfig(app) {
+    const pool = app.getPool();
+    const schema = app.getSchema();
+
     app.api('products', (req, res) => {
         const params = req.body;
         const fields = params.fields.join(',');
@@ -14,7 +17,7 @@ function apiConfig(app, pool, schema) {
             ((params.limit && (params.limit > 0)) ? 'LIMIT ' + params.limit + ' ' : '') +
             ((params.page && (params.page > 0)) ? 'OFFSET ' + (params.limit * (params.page - 1)) : ''),
             (err, result) => {
-                if (err) console.log(err);
+                if (err) app.log(err);
                 else {
                     answer.success = true;
                     answer.products = result.rows;
@@ -36,8 +39,8 @@ function apiConfig(app, pool, schema) {
         let answer = { success: false };
         res.status(200).type('text/json');
         pool.query('SELECT login, verification FROM '+schema+'.users WHERE userId=($1)', [params.id], (err, result) => {
-            if (err) console.log(err);
-            else if (result.rowCount === 0) console.log("User with id `" + params.id + "` not found.");
+            if (err) app.log(err);
+            else if (result.rowCount === 0) app.log("User with id `" + params.id + "` not found.");
             else {
                 const mailConfig = {
                     from: '"Магазин Софта" <' + this.mailUser + '>',
@@ -46,10 +49,10 @@ function apiConfig(app, pool, schema) {
                     html: '<p>Добро пожаловать в Магазин Софта!</p><p>Подтвердите свой профиль, перейдя по <a href="'+origin+'/confirm/'+result.rows[0].verification+'">ссылке</a>.</p>'
                 };
                 this.mailTransporter.sendMail(mailConfig, (err, info) => {
-                    if (err) console.log(err);
+                    if (err) app.log(err);
                     else {
                         answer.success = true;
-                        console.log('Email sent: ' + info.response);
+                        app.log('Email sent: ' + info.response);
                     }
                     res.send(JSON.stringify(answer));
                 });

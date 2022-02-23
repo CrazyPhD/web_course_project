@@ -27,27 +27,12 @@ class Application {
             }
         });
 
-        let routes = this.routes = new Routes(app, pool, schema);
-
-        app.api = (request, handler, next) => {
-            const url = '/api/'+request;
-            next ? app.post(url, handler, next) : app.post(url, handler);
-            app.get(url, (req, res) => {
-                res.status(403).type('text/json');
-                res.send('Access denied.');
-            });
-        };
-
         this.appConfig();
-        routes.attachRoutes(app, pool, schema);
+        this.routes = new Routes(app).initRoutes();
     }
 
     getApp() {
         return this.app;
-    }
-
-    getPool() {
-        return this.pool;
     }
 
     appConfig() {
@@ -72,7 +57,30 @@ class Application {
         app.use(express.static(__dirname + '/../public'));
         app.set('views', __dirname + '/views');
         app.set('view engine', 'pug');
-        passport.passportConfig(this.pool, this.schema);
+
+        app.api = (request, handler, next) => {
+            const url = '/api/'+request;
+            next ? app.post(url, handler, next) : app.post(url, handler);
+            app.get(url, (req, res) => {
+                res.status(403).type('text/json');
+                res.send('Access denied.');
+            });
+        };
+
+        app.log = (message) => {
+            const time = new Date().toISOString();
+            console.log("[" + time + "]", message);
+        };
+
+        app.getPool = () => {
+            return this.pool;
+        };
+
+        app.getSchema = () => {
+            return this.schema;
+        }
+
+        passport.passportConfig(this.app);
     }
 }
 

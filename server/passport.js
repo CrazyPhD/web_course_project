@@ -2,7 +2,10 @@ const {Strategy: LocalStrategy} = require("passport-local");
 const bcrypt = require("bcryptjs");
 const passport = require('passport');
 
-function passportConfig(pool, schema) {
+function passportConfig(app) {
+    const pool = app.getPool();
+    const schema = app.getSchema();
+
     passport.serializeUser(function(user, done) {
         done(null, user);
     });
@@ -25,7 +28,7 @@ function passportConfig(pool, schema) {
                         bcrypt.compare(password, user.password, (err, valid) => {
                             if (err) return done(err);
                             if (valid) {
-                                console.log(req.body.login + ' -> login');
+                                app.log(req.body.login + ' -> login');
                                 let config = { id: user.userid, login: user.login, firstName: user.firstname, lastName: user.lastname, confirmed: user.confirmed, cart: user.cart, orders: user.orders };
                                 if (user.is_admin === true) config.is_admin = true;
                                 return done(null, config);
@@ -50,7 +53,7 @@ function passportConfig(pool, schema) {
                     return done(null, false, req.flash('message', "Неверно введен E-Mail."));
                 bcrypt.hash(req.body.password, 8, (err, passHash) => {
                     if (err) {
-                        console.log(err);
+                        app.log(err);
                     } else {
                         pool.query('SELECT userId FROM ' + schema + '.users WHERE login=($1)', [req.body.login], (err, result) => {
                             if (err) return done(err);
@@ -59,9 +62,9 @@ function passportConfig(pool, schema) {
                             } else {
                                 pool.query('INSERT INTO ' + schema + '.users (login, firstName, lastName, password) VALUES ($1, $2, $3, $4) RETURNING *', [req.body.login, req.body.firstName, req.body.lastName, passHash], (err, result) => {
                                     if (err) {
-                                        console.log(err);
+                                        app.log(err);
                                     } else {
-                                        console.log(req.body.login + ' -> register');
+                                        app.log(req.body.login + ' -> register');
                                         return done(null, {
                                             id: result.rows[0].userId,
                                             login: req.body.login,

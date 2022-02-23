@@ -4,16 +4,14 @@ const api = require("./api");
 const bl = require("./bl");
 
 class Routes {
-    constructor(app, pool, schema) {
+    constructor(app) {
         this.app = app;
-        this.pool = pool;
-        this.schema = schema;
+        this.pool = app.getPool();
+        this.schema = app.getSchema();
     }
 
-    attachRoutes() {
+    initRoutes() {
         const app = this.app;
-        const pool = this.pool;
-        const schema = this.schema;
 
         app.get('/', (req, res) => {
             this.getPageHandler(req, res, 'index', 'Главная');
@@ -58,7 +56,7 @@ class Routes {
         app.get('/admin/editproduct/:productId', this.getAdminEditProductHandler.bind(this));
         app.post('/admin/editproduct/:productId', multer({ storage: multer.memoryStorage() }).single('img'), this.postAdminEditProductHandler.bind(this));
 
-        api.apiConfig(app, pool, schema);
+        api.apiConfig(app);
 
         app.get('*', function(req, res){
             res.status(404).type("text/html");
@@ -67,6 +65,8 @@ class Routes {
                 title: 'Ошибка 404'
             });
         });
+
+        return this;
     }
 
     getAdminEditProductHandler(req, res) {
@@ -101,7 +101,7 @@ class Routes {
 
     postAdminEditProductHandler(req, res, next) {
         if (req.isAuthenticated() && req.user.is_admin === true) {
-            bl.updateProduct(this.pool, req, res, req.params.productId, req.body.oldImage);
+            bl.updateProduct(this.app, req, res, req.params.productId, req.body.oldImage);
         } else {
             res.redirect('/');
         }
@@ -125,7 +125,7 @@ class Routes {
 
     postAdminAddProductHandler(req, res, next) {
         if (req.isAuthenticated() && req.user.is_admin === true) {
-            bl.registerProduct(this.pool, req, res);
+            bl.registerProduct(this.app, req, res);
         } else {
             res.redirect('/');
         }
@@ -203,7 +203,7 @@ class Routes {
     }
     getLogoutHandler(req, res) {
         if (req.isAuthenticated()) {
-            console.log(req.user.login + ' -> logout');
+            this.app.log(req.user.login + ' -> logout');
             req.logout();
             res.redirect('/');
         } else {
@@ -231,7 +231,7 @@ class Routes {
 
         pool.query('SELECT login, confirmed FROM '+schema+'.users WHERE verification=($1)', [req.params.verification], (err, result) => {
             if (err || result.rowCount === 0) {
-                console.log(err || "DB error.");
+                this.app.log(err || "DB error.");
                 res.redirect("/");
             }
             let config = { page: 'confirm', verification: req.params.verification };

@@ -2,7 +2,8 @@ function imageFileToBase64(file) {
     return 'data:' + file.mimetype+';base64,' + file.buffer.toString("base64");
 }
 
-function registerProduct(pool, req, res) {
+function registerProduct(app, req, res) {
+    const pool = app.getPool();
     const info = req.body;
     const file = req.file;
 
@@ -18,13 +19,14 @@ function registerProduct(pool, req, res) {
         'INSERT INTO '+this.schema+'.products (name, price, keywords, shortdesc, description, image, count) VALUES ($1, $2, $3, $4, $5, $6, $7)',
         [name, price, keywords, shortdesc, description, image, count],
         (err, result) => {
-            err ? console.log(err) : console.log('Product `' + name + '`' + ' -> register');
+            err ? app.log(err) : app.log('Product `' + name + '`' + ' -> register');
             res.redirect('/admin');
         }
     );
 }
 
-function updateProduct(pool, req, res, productId, oldImage) {
+function updateProduct(app, req, res, productId, oldImage) {
+    const pool = app.getPool();
     const info = req.body;
     const file = req.file;
 
@@ -42,7 +44,7 @@ function updateProduct(pool, req, res, productId, oldImage) {
         (err, result) => {
             if (err) res.redirect('/admin');
             else {
-                console.log('Product ' + name + ' -> update');
+                app.log('Product ' + name + ' -> update');
                 res.render('admin/addproduct', {
                     product: {
                         id: productId,
