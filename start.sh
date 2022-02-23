@@ -1,3 +1,3 @@
 #!/bin/bash
-npm start >> log.txt &
+node server/index.js >> log.txt &
 echo $! > pid
