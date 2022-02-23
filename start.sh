@@ -1,3 +1,3 @@
 #!/bin/bash
-npm start > log.txt &
+npm start >> log.txt &
 echo $! > pid
