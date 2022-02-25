@@ -12,8 +12,13 @@
             a(id="confirm" href="/confirm") подтвердить
             | .
         script.
-            DOM.get("#confirm").on('click', (e) => {
+            const confirm = DOM.get("#confirm");
+            confirm.blocked = false;
+            confirm.on('click', (e) => {
                 e.preventDefault();
+                if (confirm.blocked)
+                    return;
+                confirm.blocked = true;
                 fetch('/api/send_confirmation', {
                     method: "POST",
                     body: JSON.stringify({
