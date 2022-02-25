@@ -1,6 +1,7 @@
 function apiConfig(app) {
     const pool = app.getPool();
     const schema = app.getSchema();
+    const mail = app.getMailConfig();
 
     app.api('products', (req, res) => {
         const params = req.body;
@@ -41,12 +42,12 @@ function apiConfig(app) {
             else if (result.rowCount === 0) app.log("User with id `" + params.id + "` not found.");
             else {
                 const mailConfig = {
-                    from: '"Магазин Софта" <' + this.mailUser + '>',
+                    from: '"Магазин Софта" <' + mail.user + '>',
                     to: result.rows[0].login,
                     subject: 'Подтверждение профиля',
                     html: '<p>Добро пожаловать в Магазин Софта!</p><p>Подтвердите свой профиль, перейдя по <a href="'+origin+'/confirm/'+result.rows[0].verification+'">ссылке</a>.</p>'
                 };
-                this.mailTransporter.sendMail(mailConfig, (err, info) => {
+                mail.transporter.sendMail(mailConfig, (err, info) => {
                     if (err) app.log(err);
                     else {
                         answer.success = true;

@@ -80,6 +80,10 @@ class Application {
             return this.schema;
         }
 
+        app.getMailConfig = () => {
+            return { user: this.mailUser, transporter: this.mailTransporter };
+        }
+
         passport.passportConfig(this.app);
     }
 }
