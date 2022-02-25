@@ -33,8 +33,6 @@ function apiConfig(app) {
 
     app.api('send_confirmation', (req, res) => {
         const params = req.body;
-        const pool = this.pool;
-        const schema = this.schema;
         const origin = req.header('Origin');
         let answer = { success: false };
         res.status(200).type('text/json');
